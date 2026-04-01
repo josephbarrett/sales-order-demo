@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sales Order - List</title>
+
+  <!-- CDN CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+0oGuhTb4sK9v5xO4hWvP9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.13.8/css/dataTables.bootstrap4.min.css" integrity="sha512-yYp5qfB/6cg8oK5yN1JQfZc2RkKx6UTf5bVx7PjJ5aDFeKfqR1n5Ck4l4gX1E7nU+vDqkz/8xg8wV+1c0lS7lg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    body { background: #f8f9fc; }
+    .sidebar {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #4e73df 0%, #224abe 100%);
+    }
+    .sidebar .nav-link, .sidebar .navbar-brand { color: rgba(255,255,255,.92); }
+    .sidebar .nav-link.active { background: rgba(255,255,255,.14); border-radius: .35rem; }
+    .content { min-height: 100vh; }
+    .topbar { background: #fff; }
+  </style>
+
+  <script>
+    (function(){
+      var loggedIn = sessionStorage.getItem('salesOrderloggedIn');
+      if (loggedIn !== 'yes') window.location.href = 'index.html';
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row no-gutters">
+
+      <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar p-3">
+        <a class="navbar-brand d-flex align-items-center" href="home.html">
+          <i class="fa-solid fa-clipboard-list mr-2"></i>
+          <strong>Sales Order</strong>
+        </a>
+        <hr class="bg-light" style="opacity:.25;" />
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="home.html"><i class="fa-solid fa-gauge-high mr-2"></i>Dashboard</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-briefcase mr-2"></i>Vendors</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-file-invoice-dollar mr-2"></i>Payment Mode</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-credit-card mr-2"></i>Vendor credits</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-receipt mr-2"></i>Invoices</a></li>
+          <li class="nav-item">
+            <a class="nav-link active" href="orders.html"><i class="fa-solid fa-table mr-2"></i>Sales Order</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-wrench mr-2"></i>Settings</a></li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="col-md-9 ml-sm-auto col-lg-10 px-0 content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light topbar shadow-sm px-3">
+          <span class="navbar-text font-weight-bold text-muted">Sales Order</span>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 text-gray-600 small">Douglas McGee</span>
+                <i class="fa-solid fa-circle-user fa-lg text-secondary"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#" onclick="return false;"><i class="fa-solid fa-user mr-2 text-muted"></i>Profile</a>
+                <a class="dropdown-item" href="#" onclick="return false;"><i class="fa-solid fa-gear mr-2 text-muted"></i>Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fa-solid fa-right-from-bracket mr-2 text-muted"></i>Logout</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="p-4">
+          <div class="card shadow-sm mb-4">
+            <div class="card-header py-3 d-flex align-items-center justify-content-between">
+              <h1 class="h3 mb-0 text-dark">Sales Order</h1>
+              <div>
+                <button id="export" class="btn btn-primary" type="button" onclick="exportToCSV()">
+                  <i class="fa-solid fa-file-export mr-2"></i>Export
+                </button>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="alert alert-info mb-3">
+                <strong>Data source:</strong> <code>Sales Order.csv</code> in the repository root.
+              </div>
+
+              <div class="table-responsive">
+                <table id="ordersTable" class="table table-striped table-bordered" style="width:100%">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Sales Order</th>
+                      <th>Customer Name</th>
+                      <th>Order Date</th>
+                      <th>Order Status</th>
+                      <th>Expected Ship Date</th>
+                      <th>Delivery Method</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <footer class="text-center text-muted small py-4">
+            ©2022 Automation Anywhere, Inc. (Standalone GitHub Pages demo)
+          </footer>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- CDN JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js" integrity="sha512-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ctcI85QmK5dY3iU7YkD0C8Wg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.13.8/jquery.dataTables.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.13.8/js/dataTables.bootstrap4.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <script>
+    let rawRows = [];
+    let tableApi = null;
+
+    function logout() {
+      sessionStorage.setItem('salesOrderloggedIn','no');
+      window.location.href = 'index.html';
+    }
+
+    function loadOrders() {
+      fetch('Sales%20Order.csv')
+        .then(r => {
+          if (!r.ok) throw new Error('Unable to load Sales Order.csv from the repo root.');
+          return r.text();
+        })
+        .then(text => {
+          const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+          rawRows = (parsed.data || []).filter(r => r['Sales Order']);
+
+          const tbody = document.querySelector('#ordersTable tbody');
+          tbody.innerHTML = '';
+
+          for (const r of rawRows) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${escapeHtml(r['Sales Order'] || '')}</td>
+              <td>${escapeHtml(r['Customer Name'] || '')}</td>
+              <td>${escapeHtml(r['Order Date'] || '')}</td>
+              <td>${escapeHtml(r['Order Status'] || '')}</td>
+              <td>${escapeHtml(r['Expected Ship Date'] || '')}</td>
+              <td>${escapeHtml((r['Delivery Method'] || '').trim())}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+
+          tableApi = $('#ordersTable').DataTable({
+            pageLength: 10,
+            lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, 'All'] ],
+            order: [[2, 'desc']],
+            columnDefs: [{ targets: [2,4], type: 'date' }]
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          alert(err.message);
+        });
+    }
+
+    function exportToCSV() {
+      const headers = ['Sales Order','Customer Name','Order Date','Order Status','Expected Ship Date','Delivery Method'];
+      let rows = [];
+
+      if (tableApi) {
+        const data = tableApi.rows({ search: 'applied' }).data();
+        for (let i = 0; i < data.length; i++) rows.push(data[i]);
+      } else {
+        rows = rawRows.map(r => headers.map(h => r[h] || ''));
+      }
+
+      const csv = [headers, ...rows]
+        .map(row => row.map(v => {
+          const s = String(v).replace(/\r?\n/g,' ');
+          if (/[",\n]/.test(s) || /^\s|\s$/.test(s)) return '"' + s.replace(/"/g,'""') + '"';
+          return s;
+        }).join(','))
+        .join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'SalesOrders_export.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOrders);
+  </script>
+</body>
+</html>
+``

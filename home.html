@@ -1,226 +1,254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sales Order App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sales Order - Home</title>
 
-  <!-- Bootstrap 4.6 -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css"
-    integrity="sha512-8s18WLe9HjU9z7Xl1rhtSUi6SL+z0JRSvNnCpM3Pbd2JY3zBq2IJmIHy4N4t+w6F+Cj9muXbzX6ZjYJ8RcbJ9g=="
-    crossorigin="anonymous"
-  >
+  <!-- CDN CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" integrity="sha512-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+0oGuhTb4sK9v5xO4hWvP9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
-    crossorigin="anonymous"
-  >
-
-  <!-- SB Admin 2 Theme -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.4/css/sb-admin-2.min.css"
-    crossorigin="anonymous"
-  >
   <style>
-/* ===============================
-   MINIMAL FALLBACK UI STYLES
-   Used only if CDN CSS fails
-   =============================== */
+    /* Minimal layout helpers (Bootstrap-first) */
+    body { background: #f8f9fc; }
+    .sidebar {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #4e73df 0%, #224abe 100%);
+    }
+    .sidebar .nav-link, .sidebar .navbar-brand { color: rgba(255,255,255,.92); }
+    .sidebar .nav-link.active { background: rgba(255,255,255,.14); border-radius: .35rem; }
+    .content { min-height: 100vh; }
+    .topbar { background: #fff; }
+  </style>
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f8f9fc;
-  color: #333;
-}
-
-/* Headings */
-h1, h2, h3, h4, h5 {
-  margin: 0 0 0.75rem;
-  font-weight: 600;
-}
-
-/* Containers */
-.container, .container-fluid {
-  padding: 20px;
-}
-
-/* Cards */
-.card {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-}
-
-.card-header {
-  padding: 12px 16px;
-  border-bottom: 1px solid #ddd;
-  font-weight: bold;
-  background: #f1f3f5;
-}
-
-.card-body {
-  padding: 16px;
-}
-
-/* Buttons */
-.btn {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  text-align: center;
-  font-size: 14px;
-}
-
-.btn-primary {
-  background: #4e73df;
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background: #2e59d9;
-}
-
-/* Forms */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* Login page helper */
-.bg-gradient-primary {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #4e73df, #224abe);
-}
-
-/* Tables */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-th {
-  background: #f1f3f5;
-}
-
-/* Sidebar (very lightweight fallback) */
-.sidebar {
-  min-height: 100vh;
-  width: 220px;
-  background: #4e73df;
-  color: #fff;
-  float: left;
-}
-
-.sidebar a {
-  display: block;
-  color: #fff;
-  padding: 12px 16px;
-  text-decoration: none;
-}
-
-.sidebar a:hover {
-  background: rgba(255,255,255,0.15);
-}
-
-/* Main content next to sidebar */
-#content-wrapper {
-  margin-left: 220px;
-  padding: 20px;
-}
-
-/* Utility */
-.text-center { text-align: center; }
-.mb-4 { margin-bottom: 1.5rem; }
-.mt-5 { margin-top: 3rem; }
-
-</style>
-
+  <script>
+    // Simple session gate (GitHub Pages friendly)
+    (function(){
+      var loggedIn = sessionStorage.getItem('salesOrderloggedIn');
+      if (loggedIn !== 'yes') window.location.href = 'index.html';
+    })();
+  </script>
 </head>
 
-<body id="page-top">
+<body>
+  <div class="container-fluid">
+    <div class="row no-gutters">
 
-<script>
-  if (sessionStorage.getItem("loggedIn") !== "yes") {
-    window.location.href = "index.html";
-  }
-</script>
-
-<div id="wrapper">
-
-  <!-- Sidebar -->
-  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion">
-    home.html
-      <div class="sidebar-brand-text">Sales Order</div>
-    </a>
-
-    <li class="nav-item active">
-      home.html
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </a>
-    </li>
-
-    <li class="nav-item">
-      sales-orders.html
-        <i class="fas fa-table"></i> Sales Orders
-      </a>
-    </li>
-  </ul>
-
-  <!-- Content -->
-  <div id="content-wrapper" class="d-flex flex-column">
-    <div id="content">
-
-      <nav class="navbar navbar-light bg-white shadow mb-4">
-        <span class="navbar-text ml-auto">Douglas McGee</span>
+      <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar p-3">
+        <a class="navbar-brand d-flex align-items-center" href="home.html">
+          <i class="fa-solid fa-clipboard-list mr-2"></i>
+          <strong>Sales Order</strong>
+        </a>
+        <hr class="bg-light" style="opacity:.25;" />
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="home.html"><i class="fa-solid fa-gauge-high mr-2"></i>Dashboard</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-briefcase mr-2"></i>Vendors</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-file-invoice-dollar mr-2"></i>Payment Mode</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-credit-card mr-2"></i>Vendor credits</a></li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-receipt mr-2"></i>Invoices</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="orders.html"><i class="fa-solid fa-table mr-2"></i>Sales Order</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><i class="fa-solid fa-wrench mr-2"></i>Settings</a></li>
+        </ul>
       </nav>
 
-      <div class="container-fluid">
-        <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
+      <!-- Main Content -->
+      <main class="col-md-9 ml-sm-auto col-lg-10 px-0 content">
 
-        <div class="card shadow mb-4">
-          <div class="card-header">
-            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light topbar shadow-sm px-3">
+          <span class="navbar-text font-weight-bold text-muted">Dashboard</span>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 text-gray-600 small">Douglas McGee</span>
+                <i class="fa-solid fa-circle-user fa-lg text-secondary"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#" onclick="return false;"><i class="fa-solid fa-user mr-2 text-muted"></i>Profile</a>
+                <a class="dropdown-item" href="#" onclick="return false;"><i class="fa-solid fa-gear mr-2 text-muted"></i>Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fa-solid fa-right-from-bracket mr-2 text-muted"></i>Logout</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-dark">Dashboard</h1>
+            <a href="orders.html" class="btn btn-primary"><i class="fa-solid fa-table mr-2"></i>Open Sales Orders</a>
           </div>
-          <div class="card-body">
-            <h4 class="small font-weight-bold">
-              Server Migration <span class="float-right">20%</span>
-            </h4>
-            <div class="progress mb-4">
-              <div class="progress-bar bg-danger" style="width:20%"></div>
+
+          <!-- Summary Cards -->
+          <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow-sm h-100">
+                <div class="card-body">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Orders</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="kpiOrders">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow-sm h-100">
+                <div class="card-body">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Confirmed</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="kpiConfirmed">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow-sm h-100">
+                <div class="card-body">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="kpiPending">—</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-danger shadow-sm h-100">
+                <div class="card-body">
+                  <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Delivery Outstanding</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="kpiOutstanding">—</div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-lg-7 mb-4">
+              <div class="card shadow-sm">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Quick actions</h6>
+                </div>
+                <div class="card-body">
+                  <p class="mb-3">This page is intentionally lightweight for GitHub Pages hosting.</p>
+                  <div class="d-flex flex-wrap">
+                    <a class="btn btn-outline-primary mr-2 mb-2" href="orders.html"><i class="fa-solid fa-magnifying-glass mr-2"></i>Search orders</a>
+                    <a class="btn btn-outline-secondary mr-2 mb-2" href="orders.html#export"><i class="fa-solid fa-file-export mr-2"></i>Export CSV</a>
+                    <button class="btn btn-outline-dark mb-2" onclick="logout()"><i class="fa-solid fa-right-from-bracket mr-2"></i>Logout</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-5 mb-4">
+              <div class="card shadow-sm">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Order status mix</h6>
+                </div>
+                <div class="card-body">
+                  <div class="mb-2">
+                    <div class="d-flex justify-content-between">
+                      <span>Confirmed</span><span id="pctConfirmed">—</span>
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar bg-success" id="barConfirmed" role="progressbar" style="width:0%"></div>
+                    </div>
+                  </div>
+                  <div class="mb-2">
+                    <div class="d-flex justify-content-between">
+                      <span>Pending</span><span id="pctPending">—</span>
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar bg-warning" id="barPending" role="progressbar" style="width:0%"></div>
+                    </div>
+                  </div>
+                  <div class="mb-2">
+                    <div class="d-flex justify-content-between">
+                      <span>Draft</span><span id="pctDraft">—</span>
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar bg-info" id="barDraft" role="progressbar" style="width:0%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="d-flex justify-content-between">
+                      <span>Delivery Outstanding</span><span id="pctOutstanding">—</span>
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar bg-danger" id="barOutstanding" role="progressbar" style="width:0%"></div>
+                    </div>
+                  </div>
+
+                  <small class="text-muted d-block mt-3">KPIs are calculated from <code>Sales Order.csv</code>.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <footer class="text-center text-muted small py-4">
+            ©2022 Automation Anywhere, Inc. (Standalone GitHub Pages demo)
+          </footer>
         </div>
 
-      </div>
+      </main>
     </div>
   </div>
-</div>
 
+  <!-- CDN JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js" integrity="sha512-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ctcI85QmK5dY3iU7YkD0C8Wg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function logout() {
+      sessionStorage.setItem('salesOrderloggedIn','no');
+      window.location.href = 'index.html';
+    }
 
+    // Load CSV and compute KPIs
+    (function loadKpis(){
+      fetch('Sales%20Order.csv')
+        .then(r => {
+          if (!r.ok) throw new Error('Unable to load CSV. Make sure Sales Order.csv is in the repo root.');
+          return r.text();
+        })
+        .then(text => {
+          const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+          const rows = (parsed.data || []).filter(r => r['Sales Order']);
+          const total = rows.length;
+
+          const byStatus = rows.reduce((acc, r) => {
+            const s = (r['Order Status'] || '').trim();
+            acc[s] = (acc[s] || 0) + 1;
+            return acc;
+          }, {});
+
+          const confirmed = byStatus['Confirmed'] || 0;
+          const pending = byStatus['Pending'] || 0;
+          const outstanding = byStatus['Delivery Outstanding'] || 0;
+          const draft = byStatus['Draft'] || 0;
+
+          document.getElementById('kpiOrders').textContent = total;
+          document.getElementById('kpiConfirmed').textContent = confirmed;
+          document.getElementById('kpiPending').textContent = pending;
+          document.getElementById('kpiOutstanding').textContent = outstanding;
+
+          function pct(x){ return total ? Math.round((x/total)*100) : 0; }
+
+          const pc = pct(confirmed), pp = pct(pending), pd = pct(draft), po = pct(outstanding);
+          document.getElementById('pctConfirmed').textContent = pc + '%';
+          document.getElementById('pctPending').textContent = pp + '%';
+          document.getElementById('pctDraft').textContent = pd + '%';
+          document.getElementById('pctOutstanding').textContent = po + '%';
+
+          document.getElementById('barConfirmed').style.width = pc + '%';
+          document.getElementById('barPending').style.width = pp + '%';
+          document.getElementById('barDraft').style.width = pd + '%';
+          document.getElementById('barOutstanding').style.width = po + '%';
+        })
+        .catch(err => {
+          console.warn(err);
+          document.getElementById('kpiOrders').textContent = 'CSV missing';
+        });
+    })();
+  </script>
 </body>
 </html>
