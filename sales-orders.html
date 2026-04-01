@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sales Orders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css
+  https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.4/css/sb-admin-2.min.css
+</head>
+
+<body>
+
+<script>
+  if (sessionStorage.getItem("loggedIn") !== "yes") {
+    window.location.href = "index.html";
+  }
+</script>
+
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header d-flex justify-content-between">
+      <h5>Sales Orders</h5>
+      <button onclick="exportCSV()" class="btn btn-primary btn-sm">Export</button>
+    </div>
+
+    <div class="card-body">
+      <table class="table table-bordered" id="ordersTable">
+        <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>SO-1001</td><td>ABC Corp</td><td>£1,200</td>
+        </tr>
+        <tr>
+          <td>SO-1002</td><td>XYZ Ltd</td><td>£850</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  function exportCSV() {
+    let csv = [];
+    document.querySelectorAll("table tr").forEach(row => {
+      let cols = [...row.children].map(c => c.innerText);
+      csv.push(cols.join(","));
+    });
+
+    const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "sales-orders.csv";
+    a.click();
+  }
+</script>
+
+</body>
+</html>
